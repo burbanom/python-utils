@@ -7,8 +7,8 @@ import fnmatch
 
 def read_args():
     parser = argparse.ArgumentParser( description = "find files in directory structure" ) 
-        parser.add_argument( "--path", "-p", metavar = "STR", type=str, required = True, help="The path where to look for the file")
-        parser.add_argument( "--filename", "-f", metavar = "STR", type=str, required = True, help="The filename to look for")
+    parser.add_argument( "--path", "-p", metavar = "STR", type=str, required = True, help="The path where to look for the file")
+    parser.add_argument( "--filename", "-f", metavar = "STR", type=str, required = True, help="The filename to look for")
     return parser.parse_args()
 
 def find_files(path,target):
@@ -30,12 +30,12 @@ if __name__ == '__main__':
   args = read_args()
   path = args.path
   target = args.filename
-  les_files = find_files(path,target)
-  for le_file in les_files:
-      print(le_file)
+  #les_files = find_files(path,target)
+  #for le_file in les_files:
+  #    print(le_file)
 
   pattern = 'ENERGY| Total FORCE_EVAL ( QS ) energy (a.u.)'
-  les_files = find_dirs_files_patern(path,pattern)
+  les_files = find_dirs_files_pattern(path,pattern)
   for le_file in les_files:
       print(le_file)
 
