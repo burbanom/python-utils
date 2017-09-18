@@ -1,15 +1,15 @@
-#!/usr/bin/env python
 from __future__ import print_function
 import os
 import sys
-import argparse
 import fnmatch
+import mmap
 
-def read_args():
-    parser = argparse.ArgumentParser( description = "find files in directory structure" ) 
-    parser.add_argument( "--path", "-p", metavar = "STR", type=str, required = True, help="The path where to look for the file")
-    parser.add_argument( "--filename", "-f", metavar = "STR", type=str, required = True, help="The filename to look for")
-    return parser.parse_args()
+def clean_files(path,pattern):
+    all_files = os.listdir(path)
+    filtered = fnmatch.filter(all_files,pattern+"*")
+    for element in filtered:
+        os.remove(os.path.join(path,element))
+
 
 def find_files(path,target):
     matches = []
@@ -25,17 +25,19 @@ def find_dirs_files_pattern(path,pattern):
             matches.append([root,filename])
     return matches
 
-if __name__ == '__main__':
+def return_value(filename,pattern):
+    if type(pattern) is str:
+        pattern = pattern.encode()
+    with open(filename, "r") as fin:
+        # memory-map the file, size 0 means whole file
+        m = mmap.mmap(fin.fileno(), 0, prot=mmap.PROT_READ)
+        #                             prot argument is *nix only
+        i = m.rfind(pattern)
+        try:
+            m.seek(i)             # seek to the location
+        except ValueError:
+            return np.nan
+        line = m.readline()   # read to the end of the line
+    return float(line.split()[-1])
 
-  args = read_args()
-  path = args.path
-  target = args.filename
-  #les_files = find_files(path,target)
-  #for le_file in les_files:
-  #    print(le_file)
-
-  pattern = 'ENERGY| Total FORCE_EVAL ( QS ) energy (a.u.)'
-  les_files = find_dirs_files_pattern(path,pattern)
-  for le_file in les_files:
-      print(le_file)
 
