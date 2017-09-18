@@ -30,4 +30,12 @@ if __name__ == '__main__':
   args = read_args()
   path = args.path
   target = args.filename
-  my_files = find_files(path,target)
+  les_files = find_files(path,target)
+  for le_file in les_files:
+      print(le_file)
+
+  pattern = 'ENERGY| Total FORCE_EVAL ( QS ) energy (a.u.)'
+  les_files = find_dirs_files_patern(path,pattern)
+  for le_file in les_files:
+      print(le_file)
+
